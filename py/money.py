@@ -12,3 +12,6 @@ class Money:
 
     def __eq__(self, other) -> bool:
         return self.amount == other.amount and self.currency == other.currency
+
+    def __str__(self) -> str:
+        return f"{self.currency} {self.amount:.2f}"
