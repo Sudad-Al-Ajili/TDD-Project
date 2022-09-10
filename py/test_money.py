@@ -9,72 +9,72 @@ class TestMoney(unittest.TestCase):
 
     def setUp(self):
         self.bank = Bank()
-        self.bank.addExchangeRate("EUR", "USD", 1.2)
-        self.bank.addExchangeRate("USD", "KRW", 1100)
+        self.bank.add_exchange_rate("EUR", "USD", 1.2)
+        self.bank.add_exchange_rate("USD", "KRW", 1100)
 
-    def testMultiplication(self):
-        tenEuros = Money(10, "EUR")
-        twentyEuros = Money(20, "EUR")
-        self.assertEqual(twentyEuros, tenEuros.times(2))
+    def test_multiplication(self):
+        ten_euros = Money(10, "EUR")
+        twenty_euros = Money(20, "EUR")
+        self.assertEqual(twenty_euros, ten_euros.times(2))
 
-    def testDivision(self):
-        originalMoney = Money(4002, "KRW")
-        actualMoneyAfterDivision = originalMoney.divide(4)
-        expectedMoneyAfterDivision = Money(1000.5, "KRW")
-        self.assertEqual(expectedMoneyAfterDivision, actualMoneyAfterDivision)
+    def test_division(self):
+        original_money = Money(4002, "KRW")
+        actual_money_after_division = original_money.divide(4)
+        expected_money_after_division = Money(1000.5, "KRW")
+        self.assertEqual(expected_money_after_division, actual_money_after_division)
 
-    def testAddition(self):
-        fiveDollars = Money(5, "USD")
-        tenDollars = Money(10, "USD")
-        fiftenDollars = Money(15, "USD")
+    def test_addition(self):
+        five_dollars = Money(5, "USD")
+        ten_dollars = Money(10, "USD")
+        fiften_dollars = Money(15, "USD")
         portfolio = Portfolio()
-        portfolio.add(fiveDollars, tenDollars)
-        self.assertEqual(fiftenDollars, portfolio.evaluate(self.bank, "USD"))
+        portfolio.add(five_dollars, ten_dollars)
+        self.assertEqual(fiften_dollars, portfolio.evaluate(self.bank, "USD"))
 
-    def testAdditionOfDollarsAndEuros(self):
-        fiveDollars = Money(5, "USD")
-        tenEuros = Money(10, "EUR")
+    def test_addition_of_dollars_and_euros(self):
+        five_dollars = Money(5, "USD")
+        ten_euros = Money(10, "EUR")
         portfolio = Portfolio()
-        portfolio.add(fiveDollars, tenEuros)
-        expectedValue = Money(17, "USD")
-        actualValue = portfolio.evaluate(self.bank, "USD")
-        self.assertEqual(expectedValue, actualValue,
-                         "%s != %s" % (expectedValue, actualValue))
+        portfolio.add(five_dollars, ten_euros)
+        expected_value = Money(17, "USD")
+        actual_value = portfolio.evaluate(self.bank, "USD")
+        self.assertEqual(expected_value, actual_value,
+                         "%s != %s" % (expected_value, actual_value))
 
-    def testAdditionofDollarsAndWons(self):
-        oneDollar = Money(1, "USD")
-        elevenHundredWon = Money(1100, "KRW")
+    def test_additionof_dollars_and_wons(self):
+        one_dollar = Money(1, "USD")
+        eleven_hundred_won = Money(1100, "KRW")
         portfolio = Portfolio()
-        portfolio.add(oneDollar, elevenHundredWon)
-        expectedValue = Money(2200, "KRW")
-        actualValue = portfolio.evaluate(self.bank, "KRW")
-        self.assertEqual(expectedValue, actualValue,
-                         "%s != %s" % (expectedValue, actualValue))
+        portfolio.add(one_dollar, eleven_hundred_won)
+        expected_value = Money(2200, "KRW")
+        actual_value = portfolio.evaluate(self.bank, "KRW")
+        self.assertEqual(expected_value, actual_value,
+                         "%s != %s" % (expected_value, actual_value))
 
-    def testAdditionWithMultipleMissingExchangeRates(self):
-        oneDollar = Money(1, "USD")
-        oneEuro = Money(1, "EUR")
-        oneWon = Money(1, "KRW")
+    def test_addition_with_multiple_missing_exchange_rates(self):
+        one_dollar = Money(1, "USD")
+        one_euro = Money(1, "EUR")
+        one_won = Money(1, "KRW")
         portfolio = Portfolio()
-        portfolio.add(oneDollar, oneEuro, oneWon)
+        portfolio.add(one_dollar, one_euro, one_won)
         with self.assertRaisesRegex(
             Exception,
             "Missing exchange rate\(s\):\[USD\->Kalganid,EUR->Kalganid,KRW->Kalganid]",
         ):
             portfolio.evaluate(self.bank, "Kalganid")
 
-    def testConversionWithDifferentRatesBetweenTwoCurrencies(self):
-        tenEuros = Money(10, "EUR")
-        self.assertEqual(self.bank.convert(tenEuros, "USD"), Money(12, "USD"))
+    def test_conversion_with_different_rates_between_two_currencies(self):
+        ten_euros = Money(10, "EUR")
+        self.assertEqual(self.bank.convert(ten_euros, "USD"), Money(12, "USD"))
 
-        self.bank.addExchangeRate("EUR", "USD", 1.3)
-        self.assertEqual(self.bank.convert(tenEuros, "USD"), Money(13, "USD"))
+        self.bank.add_exchange_rate("EUR", "USD", 1.3)
+        self.assertEqual(self.bank.convert(ten_euros, "USD"), Money(13, "USD"))
 
-    def testConversionWithMissingExchangeRate(self):
+    def test_conversion_with_missing_exchange_rate(self):
         bank = Bank()
-        tenEuros = Money(10, "EUR")
+        ten_euros = Money(10, "EUR")
         with self.assertRaisesRegex(Exception, "EUR->Kalganid"):
-            bank.convert(tenEuros, "Kalganid")
+            bank.convert(ten_euros, "Kalganid")
 
 
 if __name__ == '__main__':

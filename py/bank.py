@@ -4,18 +4,18 @@ from money import Money
 class Bank:
 
     def __init__(self):
-        self.exchangeRates = {}
+        self.exchange_rates = {}
 
-    def addExchangeRate(self, fromCurrency, toCurrency, rate):
-        key = fromCurrency + "->" + toCurrency
-        self.exchangeRates[key] = rate
+    def add_exchange_rate(self, from_currency, to_currency, rate):
+        key = from_currency + "->" + to_currency
+        self.exchange_rates[key] = rate
 
-    def convert(self, aMoney, aCurrency):
-        if aMoney.currency == aCurrency:
-            return Money(aMoney.amount, aCurrency)
+    def convert(self, a_money, a_currency):
+        if a_money.currency == a_currency:
+            return Money(a_money.amount, a_currency)
 
-        key = aMoney.currency + "->" + aCurrency
-        if key in self.exchangeRates:
-            return Money(aMoney.amount * self.exchangeRates[key], aCurrency)
+        key = a_money.currency + "->" + a_currency
+        if key in self.exchange_rates:
+            return Money(a_money.amount * self.exchange_rates[key], a_currency)
 
         raise Exception(key)

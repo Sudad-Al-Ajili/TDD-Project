@@ -1,6 +1,3 @@
-import functools
-import operator
-
 from money import Money
 
 
@@ -24,5 +21,5 @@ class Portfolio:
         if len(failures) == 0:
             return Money(total, currency)
 
-        failureMessage = ",".join(f.args[0] for f in failures)
-        raise Exception("Missing exchange rate(s):[" + failureMessage + "]")
+        failure_message = ",".join(f.args[0] for f in failures)
+        raise Exception("Missing exchange rate(s):[" + failure_message + "]")
