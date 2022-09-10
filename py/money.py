@@ -1,8 +1,8 @@
 class Money:
 
-    def __init__(self, amount, currency) -> None:
-        self.amount = amount
-        self.currency = currency
+    def __init__(self, amount, currency):
+            self.amount = amount
+            self.currency = currency
 
     def times(self, multiplier):
         return Money(self.amount * multiplier, self.currency)
@@ -10,8 +10,14 @@ class Money:
     def divide(self, divisor):
         return Money(self.amount / divisor, self.currency)
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other):
         return self.amount == other.amount and self.currency == other.currency
 
     def __str__(self) -> str:
         return f"{self.currency} {self.amount:.2f}"
+
+    def __add__(self, a):
+        if a is not None and self.currency == a.currency:
+            return Money(self.amount + a.amount, self.currency)
+        else:
+            return None

@@ -76,6 +76,28 @@ class TestMoney(unittest.TestCase):
         with self.assertRaisesRegex(Exception, "EUR->Kalganid"):
             bank.convert(ten_euros, "Kalganid")
 
+    def test_add_moneys_directly(self):
+        self.assertEqual(Money(15, "USD"), Money(5, "USD") + Money(10, "USD"))
+        self.assertEqual(Money(15, "USD"), Money(10, "USD") + Money(5, "USD"))
+        self.assertEqual(None, Money(5, "USD") + Money(10, "EUR"))
+        self.assertEqual(None, Money(5, "USD") + None)
+
+    def test_conversion_with_different_rates_between_two_currencies(self):
+        ten_euros = Money(10, "EUR")
+        result, missing_key = self.bank.convert(ten_euros, "USD")
+        self.assertEqual(result, Money(12, "USD"))
+        self.assertIsNone(missing_key)
+        self.bank.add_exchange_rate("EUR", "USD", 1.3)
+        result, missing_key = self.bank.convert(ten_euros, "USD")
+        self.assertEqual(result, Money(13, "USD"))
+        self.assertIsNone(missing_key)
+
+    def test_conversion_with_missing_exchange_rate(self):
+        ten_euros = Money(10, "EUR")
+        result, missing_key = self.bank.convert(ten_euros, "Kalganid")
+        self.assertIsNone(result)
+        self.assertEqual(missing_key, "EUR->Kalganid")
+
 
 if __name__ == '__main__':
     unittest.main()
